@@ -1,0 +1,69 @@
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs (no los necesitamos en la imagen)
+logs/
+*.log
+
+# Exports (estos se generan en runtime)
+exports/
+!exports/.gitkeep
+
+# Data
+data/sample_data/
+
+# Documentation
+docs/
+
+# Tests
+tests/
+
+# Examples
+examples/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Terraform
+antifraude-iac/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+
+# Misc
+README.md
+LICENSE
+*.md

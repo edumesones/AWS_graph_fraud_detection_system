@@ -1,0 +1,61 @@
+# ==============================================================================
+# Terraform Variables - Ejemplo de Configuración
+# Copiar a terraform.tfvars y ajustar valores
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# General
+# ------------------------------------------------------------------------------
+project_name = "fraud-detection"
+environment  = "production"
+aws_region   = "eu-north-1"
+
+tags = {
+  Project     = "fraud-detection"
+  ManagedBy   = "terraform"
+  Team        = "data-science"
+  CostCenter  = "analytics"
+}
+
+# ------------------------------------------------------------------------------
+# Networking
+# ------------------------------------------------------------------------------
+vpc_cidr = "10.0.0.0/16"
+availability_zones = ["us-east-1a", "us-east-1b"]
+
+# ------------------------------------------------------------------------------
+# ECS Fargate - Recursos para grafos en memoria
+# ------------------------------------------------------------------------------
+# 4 vCPU + 8GB RAM es el mínimo recomendado para NetworkX con grafos medianos
+container_cpu    = 4096  # 4 vCPU
+container_memory = 8192  # 8 GB
+
+# Para grafos grandes (>100k nodos), considerar:
+# container_cpu    = 8192  # 8 vCPU
+# container_memory = 16384 # 16 GB
+
+desired_count = 2
+min_capacity  = 2
+max_capacity  = 10
+
+# ------------------------------------------------------------------------------
+# Auto Scaling - Target Tracking
+# ------------------------------------------------------------------------------
+cpu_target_value    = 70  # Escalar cuando CPU promedio > 70%
+memory_target_value = 80  # Escalar cuando memoria promedio > 80%
+
+scale_in_cooldown  = 300  # 5 minutos antes de reducir
+scale_out_cooldown = 60   # 1 minuto antes de aumentar
+
+# ------------------------------------------------------------------------------
+# Domain & SSL (OPCIONAL)
+# ------------------------------------------------------------------------------
+# Descomentar y configurar si tienes un dominio propio
+# domain_name     = "fraud-detection.tu-dominio.com"
+# certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/xxxxx"
+
+# ------------------------------------------------------------------------------
+# Storage
+# ------------------------------------------------------------------------------
+efs_performance_mode = "generalPurpose"
+# Para workloads con muchos archivos pequeños, usar "maxIO"

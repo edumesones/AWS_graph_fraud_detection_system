@@ -1,0 +1,50 @@
+# ==============================================================================
+# Configuración OPTIMIZADA PARA MINIMAL COST / FREE TIER
+# ==============================================================================
+# ADVERTENCIA: Incluso con esta configuración, habrá costos (~$55-70/mes)
+# Free Tier de AWS: https://aws.amazon.com/free/
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# General
+# ------------------------------------------------------------------------------
+project_name = "fraud-detection"
+environment  = "dev"
+aws_region   = "eu-north-1"
+
+tags = {
+  Project    = "fraud-detection"
+  ManagedBy  = "terraform"
+  Team       = "data-science"
+  Environment = "dev-low-cost"
+}
+
+# ------------------------------------------------------------------------------
+# Networking
+# ------------------------------------------------------------------------------
+vpc_cidr           = "10.0.0.0/16"
+availability_zones = ["eu-north-1a", "eu-north-1b"]
+
+# ------------------------------------------------------------------------------
+# ECS Fargate - CONFIGURACIÓN MÍNIMA
+# ------------------------------------------------------------------------------
+container_cpu    = 256  # 0.25 vCPU (MÍNIMO)
+container_memory = 512  # 0.5 GB RAM (MÍNIMO)
+
+desired_count = 1  # SOLO 1 instancia
+min_capacity  = 1
+max_capacity  = 2
+
+# ------------------------------------------------------------------------------
+# Auto Scaling
+# ------------------------------------------------------------------------------
+cpu_target_value    = 80
+memory_target_value = 85
+
+scale_in_cooldown  = 600
+scale_out_cooldown = 300
+
+# ------------------------------------------------------------------------------
+# Storage
+# ------------------------------------------------------------------------------
+efs_performance_mode = "generalPurpose"
