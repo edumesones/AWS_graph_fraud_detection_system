@@ -1,0 +1,524 @@
+{
+  "generated_at": "2026-09-23T14:38:59.719834+00:00",
+  "config": {
+    "transactions": 8000,
+    "clients": 800,
+    "fraud_pct": 0.08,
+    "seed": 42,
+    "budget_s": 60.0,
+    "outlier_quantile": 0.95
+  },
+  "dataset": {
+    "num_transactions": 8000,
+    "num_graph_nodes": 1439,
+    "num_graph_edges": 7749,
+    "transactions_collapsed_into_edges": 251,
+    "transaction_fraud_rate": 0.08,
+    "fraud_type_counts": {
+      "none": 7360,
+      "mule": 301,
+      "structuring": 276,
+      "money_laundering": 63
+    },
+    "node_fraud_rate": 0.2828353022932592,
+    "pair_fraud_rate": 0.05020002580978191,
+    "fraud_nodes_with_degree_le_1": 300,
+    "fraud_nodes_total": 407,
+    "note": "Los nodos fraudulentos de grado 1 son estructuralmente invisibles: ningún detector de grafo puede recuperarlos, y acotan el recall máximo alcanzable."
+  },
+  "node_level": [
+    {
+      "name": "baseline: flag-all",
+      "unit": "nodo",
+      "source": "(referencia)",
+      "status": "ok",
+      "note": "suelo de comparación: cualquier detector por debajo de esta precision resta valor",
+      "elapsed_s": 0.0,
+      "n_flagged": 1439,
+      "precision": 0.2828353022932592,
+      "recall": 1.0,
+      "f1": 0.4409534127843987,
+      "pr_auc": null,
+      "pr_auc_basis": "n/a (salida binaria)",
+      "confusion": {
+        "tn": 0,
+        "fp": 1032,
+        "fn": 0,
+        "tp": 407
+      },
+      "typology_recall": {
+        "mule": {
+          "positives": 309,
+          "detected": 309,
+          "recall": 1.0
+        },
+        "money_laundering": {
+          "positives": 59,
+          "detected": 59,
+          "recall": 1.0
+        },
+        "structuring": {
+          "positives": 47,
+          "detected": 47,
+          "recall": 1.0
+        }
+      },
+      "typology_note": ""
+    },
+    {
+      "name": "detect_outlier_nodes",
+      "unit": "nodo",
+      "source": "analysis/anomaly_detection.py",
+      "status": "ok",
+      "note": "umbral aplicado fuera: la función ignora su propio cutoff (q=0.95)",
+      "elapsed_s": 5.21,
+      "n_flagged": 331,
+      "precision": 0.4561933534743202,
+      "recall": 0.371007371007371,
+      "f1": 0.4092140921409214,
+      "pr_auc": 0.39319736744024825,
+      "pr_auc_basis": "anomaly_score (z-score agregado)",
+      "confusion": {
+        "tn": 852,
+        "fp": 180,
+        "fn": 256,
+        "tp": 151
+      },
+      "typology_recall": {
+        "mule": {
+          "positives": 309,
+          "detected": 144,
+          "recall": 0.46601941747572817
+        },
+        "money_laundering": {
+          "positives": 59,
+          "detected": 11,
+          "recall": 0.1864406779661017
+        },
+        "structuring": {
+          "positives": 47,
+          "detected": 2,
+          "recall": 0.0425531914893617
+        }
+      },
+      "typology_note": ""
+    },
+    {
+      "name": "detect_mules",
+      "unit": "nodo",
+      "source": "analysis/patterns.py",
+      "status": "ok",
+      "note": "imbalance>=0.7 y grado total>=5",
+      "elapsed_s": 0.0,
+      "n_flagged": 3,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "pr_auc": null,
+      "pr_auc_basis": "n/a (salida binaria)",
+      "confusion": {
+        "tn": 1029,
+        "fp": 3,
+        "fn": 407,
+        "tp": 0
+      },
+      "typology_recall": {
+        "mule": {
+          "positives": 309,
+          "detected": 0,
+          "recall": 0.0
+        },
+        "money_laundering": {
+          "positives": 59,
+          "detected": 0,
+          "recall": 0.0
+        },
+        "structuring": {
+          "positives": 47,
+          "detected": 0,
+          "recall": 0.0
+        }
+      },
+      "typology_note": ""
+    },
+    {
+      "name": "identify_hub_nodes(p90)",
+      "unit": "nodo",
+      "source": "analysis/network_metrics.py",
+      "status": "ok",
+      "note": "",
+      "elapsed_s": 0.0,
+      "n_flagged": 165,
+      "precision": 0.20606060606060606,
+      "recall": 0.08353808353808354,
+      "f1": 0.11888111888111887,
+      "pr_auc": null,
+      "pr_auc_basis": "n/a (salida binaria)",
+      "confusion": {
+        "tn": 901,
+        "fp": 131,
+        "fn": 373,
+        "tp": 34
+      },
+      "typology_recall": {
+        "mule": {
+          "positives": 309,
+          "detected": 9,
+          "recall": 0.02912621359223301
+        },
+        "money_laundering": {
+          "positives": 59,
+          "detected": 25,
+          "recall": 0.423728813559322
+        },
+        "structuring": {
+          "positives": 47,
+          "detected": 6,
+          "recall": 0.1276595744680851
+        }
+      },
+      "typology_note": ""
+    },
+    {
+      "name": "FraudPatternDetector.detect_mule_accounts",
+      "unit": "nodo",
+      "source": "analysis/fraud_investigation.py",
+      "status": "ok",
+      "note": "min_degree=10 sobre grafo agregado",
+      "elapsed_s": 0.01,
+      "n_flagged": 785,
+      "precision": 0.13503184713375796,
+      "recall": 0.26044226044226043,
+      "f1": 0.17785234899328856,
+      "pr_auc": 0.27129253203425824,
+      "pr_auc_basis": "risk_score = f(grado, volumen)",
+      "confusion": {
+        "tn": 353,
+        "fp": 679,
+        "fn": 301,
+        "tp": 106
+      },
+      "typology_recall": {
+        "mule": {
+          "positives": 309,
+          "detected": 9,
+          "recall": 0.02912621359223301
+        },
+        "money_laundering": {
+          "positives": 59,
+          "detected": 58,
+          "recall": 0.9830508474576272
+        },
+        "structuring": {
+          "positives": 47,
+          "detected": 47,
+          "recall": 1.0
+        }
+      },
+      "typology_note": ""
+    }
+  ],
+  "pair_level": [
+    {
+      "name": "baseline: flag-all",
+      "unit": "par",
+      "source": "(referencia)",
+      "status": "ok",
+      "note": "suelo de comparación",
+      "elapsed_s": 0.0,
+      "n_flagged": 7749,
+      "precision": 0.05020002580978191,
+      "recall": 1.0,
+      "f1": 0.09560088473826493,
+      "pr_auc": null,
+      "pr_auc_basis": "n/a (salida binaria)",
+      "confusion": {
+        "tn": 0,
+        "fp": 7360,
+        "fn": 0,
+        "tp": 389
+      },
+      "typology_recall": {
+        "mule": {
+          "positives": 301,
+          "detected": 301,
+          "recall": 1.0
+        },
+        "money_laundering": {
+          "positives": 63,
+          "detected": 63,
+          "recall": 1.0
+        },
+        "structuring": {
+          "positives": 25,
+          "detected": 25,
+          "recall": 1.0
+        }
+      },
+      "typology_note": ""
+    },
+    {
+      "name": "[fuga] risk_score del generador",
+      "unit": "par",
+      "source": "data/synthetic_generator.py",
+      "status": "ok",
+      "note": "NO es un detector: mide cuánta señal regala la columna",
+      "elapsed_s": 0.0,
+      "n_flagged": 775,
+      "precision": 0.5019354838709678,
+      "recall": 1.0,
+      "f1": 0.668384879725086,
+      "pr_auc": 1.0,
+      "pr_auc_basis": "risk_score (derivado de la etiqueta)",
+      "confusion": {
+        "tn": 6974,
+        "fp": 386,
+        "fn": 0,
+        "tp": 389
+      },
+      "typology_recall": {
+        "mule": {
+          "positives": 301,
+          "detected": 301,
+          "recall": 1.0
+        },
+        "money_laundering": {
+          "positives": 63,
+          "detected": 63,
+          "recall": 1.0
+        },
+        "structuring": {
+          "positives": 25,
+          "detected": 25,
+          "recall": 1.0
+        }
+      },
+      "typology_note": ""
+    },
+    {
+      "name": "flag_suspicious_edges(p95 importe)",
+      "unit": "par",
+      "source": "analysis/anomaly_detection.py",
+      "status": "ok",
+      "note": "umbral = 23,496 (p95 de importes de arista)",
+      "elapsed_s": 0.01,
+      "n_flagged": 388,
+      "precision": 0.03608247422680412,
+      "recall": 0.03598971722365039,
+      "f1": 0.036036036036036036,
+      "pr_auc": 0.04836500782112013,
+      "pr_auc_basis": "importe de la arista",
+      "confusion": {
+        "tn": 6986,
+        "fp": 374,
+        "fn": 375,
+        "tp": 14
+      },
+      "typology_recall": {
+        "mule": {
+          "positives": 301,
+          "detected": 14,
+          "recall": 0.046511627906976744
+        },
+        "money_laundering": {
+          "positives": 63,
+          "detected": 0,
+          "recall": 0.0
+        },
+        "structuring": {
+          "positives": 25,
+          "detected": 0,
+          "recall": 0.0
+        }
+      },
+      "typology_note": ""
+    },
+    {
+      "name": "detect_structuring(count>=10)",
+      "unit": "par",
+      "source": "analysis/patterns.py",
+      "status": "ok",
+      "note": "el parámetro window_days no se usa dentro de la función",
+      "elapsed_s": 0.02,
+      "n_flagged": 13,
+      "precision": 1.0,
+      "recall": 0.033419023136246784,
+      "f1": 0.06467661691542288,
+      "pr_auc": 0.111241155256454,
+      "pr_auc_basis": "nº de transacciones del par",
+      "confusion": {
+        "tn": 7360,
+        "fp": 0,
+        "fn": 376,
+        "tp": 13
+      },
+      "typology_recall": {
+        "mule": {
+          "positives": 301,
+          "detected": 0,
+          "recall": 0.0
+        },
+        "money_laundering": {
+          "positives": 63,
+          "detected": 0,
+          "recall": 0.0
+        },
+        "structuring": {
+          "positives": 25,
+          "detected": 13,
+          "recall": 0.52
+        }
+      },
+      "typology_note": ""
+    },
+    {
+      "name": "detect_rapid_cycling(<=4h)",
+      "unit": "par",
+      "source": "analysis/patterns.py",
+      "status": "ok",
+      "note": "",
+      "elapsed_s": 0.01,
+      "n_flagged": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "pr_auc": null,
+      "pr_auc_basis": "n/a (salida binaria)",
+      "confusion": {
+        "tn": 7360,
+        "fp": 0,
+        "fn": 389,
+        "tp": 0
+      },
+      "typology_recall": {
+        "mule": {
+          "positives": 301,
+          "detected": 0,
+          "recall": 0.0
+        },
+        "money_laundering": {
+          "positives": 63,
+          "detected": 0,
+          "recall": 0.0
+        },
+        "structuring": {
+          "positives": 25,
+          "detected": 0,
+          "recall": 0.0
+        }
+      },
+      "typology_note": ""
+    },
+    {
+      "name": "detect_money_laundering_cycles(len<=4)",
+      "unit": "par",
+      "source": "analysis/patterns.py",
+      "status": "ok",
+      "note": "aristas de algún ciclo simple de longitud 3-4; nx.simple_cycles recibe length_bound, que acota ANTES de enumerar (sin esa cota el detector no terminaba a esta escala)",
+      "elapsed_s": 9.13,
+      "n_flagged": 4191,
+      "precision": 0.01789549033643522,
+      "recall": 0.1928020565552699,
+      "f1": 0.03275109170305677,
+      "pr_auc": null,
+      "pr_auc_basis": "n/a (salida binaria)",
+      "confusion": {
+        "tn": 3244,
+        "fp": 4116,
+        "fn": 314,
+        "tp": 75
+      },
+      "typology_recall": {
+        "mule": {
+          "positives": 301,
+          "detected": 1,
+          "recall": 0.0033222591362126247
+        },
+        "money_laundering": {
+          "positives": 63,
+          "detected": 63,
+          "recall": 1.0
+        },
+        "structuring": {
+          "positives": 25,
+          "detected": 11,
+          "recall": 0.44
+        }
+      },
+      "typology_note": "recall perfecto en money_laundering y precision 0.018 no se contradicen. El generador planta 63 pares de blanqueo (~21 ciclos), pero un grafo de 7749 aristas contiene 1850 ciclos simples de longitud 3-4 por pura coincidencia. El detector encuentra el 100% de lo que busca y lo entierra bajo los ciclos naturales del grafo: la fila agregada mide sobre todo cuántos ciclos tiene el grafo, no cuánto blanqueo hay. Para usarlo haría falta un filtro secundario sobre el ciclo (coherencia de importes, ventana temporal), no un umbral distinto."
+    },
+    {
+      "name": "FraudPatternDetector.detect_structuring",
+      "unit": "par",
+      "source": "analysis/fraud_investigation.py",
+      "status": "ok",
+      "note": "su risk_score usa is_fraudulent de la ventana: contaminado por la etiqueta",
+      "elapsed_s": 2.06,
+      "n_flagged": 13,
+      "precision": 0.9230769230769231,
+      "recall": 0.030848329048843187,
+      "f1": 0.05970149253731343,
+      "pr_auc": 0.07712681955581198,
+      "pr_auc_basis": "risk_score del patrón",
+      "confusion": {
+        "tn": 7359,
+        "fp": 1,
+        "fn": 377,
+        "tp": 12
+      },
+      "typology_recall": {
+        "mule": {
+          "positives": 301,
+          "detected": 2,
+          "recall": 0.006644518272425249
+        },
+        "money_laundering": {
+          "positives": 63,
+          "detected": 1,
+          "recall": 0.015873015873015872
+        },
+        "structuring": {
+          "positives": 25,
+          "detected": 9,
+          "recall": 0.36
+        }
+      },
+      "typology_note": ""
+    }
+  ],
+  "communities": {
+    "elapsed_s": 0.62,
+    "num_communities": 20,
+    "modularity": 0.2813343307366406,
+    "overall_node_fraud_rate": 0.2828353022932592,
+    "top_communities_by_fraud_rate": [
+      {
+        "community_id": 8,
+        "size": 33,
+        "fraud_rate": 1.0
+      },
+      {
+        "community_id": 7,
+        "size": 38,
+        "fraud_rate": 1.0
+      },
+      {
+        "community_id": 4,
+        "size": 39,
+        "fraud_rate": 1.0
+      },
+      {
+        "community_id": 9,
+        "size": 50,
+        "fraud_rate": 1.0
+      },
+      {
+        "community_id": 2,
+        "size": 86,
+        "fraud_rate": 0.6395348837209303
+      }
+    ],
+    "note": "Louvain produce una partición sin score de riesgo; no hay precision/recall reportable sin inventar una regla de marcado."
+  },
+  "total_elapsed_s": 38.14
+}
