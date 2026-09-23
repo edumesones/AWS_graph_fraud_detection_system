@@ -7,6 +7,7 @@ __pycache__/
 logs/
 exports/
 *.log
+# Terraform
 *.tfstate
 *.tfstate.*
 .terraform/
@@ -15,6 +16,7 @@ terraform.tfvars
 tfplan
 *.tfplan
 validate_output.txt
+# Caches y temporales
 .pytest_cache/
 data/sample_data/
 *_tmp.csv
