@@ -269,10 +269,10 @@ class FraudPatternDetector:
         results.sort(key=lambda x: x["risk_score"], reverse=True)
         return results
 
-    def detect_cycles(self, min_cycle_length: int = 3) -> List[Tuple[List[str], float]]:
+    def detect_cycles(self, min_cycle_length: int = 3, max_cycle_length: int = 6) -> List[Tuple[List[str], float]]:
         cycles: List[Tuple[List[str], float]] = []
         try:
-            for cycle in nx.simple_cycles(self.G):
+            for cycle in nx.simple_cycles(self.G, length_bound=max_cycle_length):  # cota ANTES de enumerar
                 if len(cycle) >= min_cycle_length:
                     edge_risks: List[float] = []
                     for i, node in enumerate(cycle):

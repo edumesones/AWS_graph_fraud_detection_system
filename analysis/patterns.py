@@ -21,7 +21,7 @@ def detect_money_laundering_cycles(G: nx.DiGraph, max_cycle_length: int = 4) -> 
         raise ValueError("max_cycle_length debe ser >= 3")
 
     cycles: List[List[str]] = []
-    for cycle in nx.simple_cycles(G):
+    for cycle in nx.simple_cycles(G, length_bound=max_cycle_length):  # cota ANTES de enumerar: sin ella no termina a escala real
         if 3 <= len(cycle) <= max_cycle_length:
             cycles.append([str(n) for n in cycle])
     return cycles

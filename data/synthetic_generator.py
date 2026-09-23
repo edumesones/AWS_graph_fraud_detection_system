@@ -211,7 +211,7 @@ def _embed_mules(
 ) -> None:
     """Inserta actividad anormal para mulas (alto grado de conexiones)."""
 
-    mule_clients = list(set(mule_clients))
+    mule_clients = sorted(set(mule_clients))  # sorted: set order depends on PYTHONHASHSEED, breaks reproducibility
     if not mule_clients:
         return
     for mule in mule_clients:
@@ -398,11 +398,11 @@ def generate_transactions(
         is_international_col = []
 
         for i in range(len(edges)):
-            ttype = random.choice(tx_types)
-            chan = random.choice(channels)
-            dev = random.choice(device_types)
-            oc = random.choice(countries)
-            dc = random.choice([c for c in countries if c != oc])
+            ttype = rnd.choice(tx_types)
+            chan = rnd.choice(channels)
+            dev = rnd.choice(device_types)
+            oc = rnd.choice(countries)
+            dc = rnd.choice([c for c in countries if c != oc])
 
             # Coherencias
             if ttype == "cash":
