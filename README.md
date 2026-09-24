@@ -9,6 +9,22 @@ evaluation at all. Adding `evaluate.py` changed what the project can honestly cl
 
 ---
 
+
+## Architecture
+
+```mermaid
+flowchart LR
+    GEN["synthetic_generator<br/>labels: fraud_type"] --> AGG["TransactionAggregator<br/>one edge per pair"]
+    AGG --> G(("NetworkX<br/>DiGraph"))
+    G --> C["cycles<br/>structuring<br/>mules"]
+    G --> M["centrality<br/>anomaly z-score"]
+    G --> L["Louvain<br/>communities"]
+    C & M & L --> EV["evaluate.py<br/>precision · recall · PR-AUC<br/>recall by typology"]
+    EV --> R["eval/results.json"]
+    G --> UI["Gradio dashboard<br/>n-hop explorer"]
+    UI -.deployed.-> AWS["ECS Fargate · ALB<br/>EFS · sticky sessions"]
+```
+
 ## What it does
 
 1. **Generates synthetic AML data** with injected typologies: laundering cycles (A→B→C→A), structuring
